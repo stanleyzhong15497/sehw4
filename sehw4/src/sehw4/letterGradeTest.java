@@ -2,9 +2,21 @@ package sehw4;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+
 import org.junit.jupiter.api.Test;
 
 class letterGradeTest {
+
+	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+	private final PrintStream originalOut = System.out;
+	private final PrintStream originalErr = System.err;
+	private final InputStream originalIn = System.in;
+	private final letterGrade lg = new letterGrade();
 
 	@Test
 	void testScoreBoundaryOfX() {
@@ -72,4 +84,32 @@ class letterGradeTest {
 	void testScoreOfA() {
 		assertEquals('A', letterGrade.letterGrade(97));
 	}
+	
+	@Test
+	void testMain1() {
+		String data = "89\n";
+		System.setOut(new PrintStream(outContent));
+		System.setIn(new ByteArrayInputStream(data.getBytes()));
+		lg.main(null);
+		assertEquals("Enetr the score = The grade of 89 is B\r\n", outContent.toString());
+		
+		System.setOut(originalOut);
+	    System.setIn(originalIn);
+		
+	}
+	
+	@Test
+	void testMain2() {
+		String data = "notNumber\n";
+		System.setOut(new PrintStream(outContent));
+		System.setIn(new ByteArrayInputStream(data.getBytes()));
+		lg.main(null);
+		assertEquals("Enetr the score = Not an integer!\r\n", outContent.toString());
+		
+		
+		System.setOut(originalOut);
+	    System.setIn(originalIn);
+		
+	}
+	
 }
